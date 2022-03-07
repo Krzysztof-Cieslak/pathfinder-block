@@ -6,7 +6,7 @@ import { useDebounce, useLocalStorage, usePackageJson } from "./hooks";
 function App() {
   const [blockId, setBlockId] = useLocalStorage(
     "blockId",
-    "/src/blocks/example-file-block/index.tsx"
+    "/src/blocks/pathfinder/index.tsx"
   );
   const [fileUrl, setFileUrl] = useLocalStorage(
     "fileUrl",

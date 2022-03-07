@@ -1,6 +1,6 @@
 {
-  "name": "custom-block-template",
-  "version": "0.0.0",
+  "name": "pathfinder-block",
+  "version": "0.0.1",
   "watch": {
     "build-blocks": {
       "patterns": [
@@ -20,25 +20,14 @@
   "blocks": [
     {
       "type": "file",
-      "id": "file-block",
-      "title": "Example File Block",
-      "description": "A basic file block",
-      "entry": "/src/blocks/example-file-block/index.tsx",
+      "id": "pathfinder",
+      "title": "Pathfinder",
+      "description": "Block providing editor tooling based on the LSIF data",
+      "entry": "/src/blocks/pathfinder/index.tsx",
       "extensions": [
         "*"
       ],
-      "example_path": "https://github.com/facebook/react/blob/main/packages/react-dom/index.js"
-    },
-    {
-      "type": "folder",
-      "id": "folder-block",
-      "title": "Example Folder Block",
-      "description": "A basic folder block",
-      "entry": "/src/blocks/example-folder-block/index.tsx",
-      "extensions": [
-        "*"
-      ],
-      "example_path": "https://github.com/githubocto/flat"
+      "example_path": ""
     }
   ],
   "dependencies": {
