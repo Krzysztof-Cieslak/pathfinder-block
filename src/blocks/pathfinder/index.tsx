@@ -18,6 +18,123 @@ import {
   Uri,
 } from "monaco-editor";
 import { useEffect } from "react";
+import { LsifReader, UriTransformer } from "@ionide/lsif-reader";
+
+const rawUrl = "https://raw.githubusercontent.com";
+const getUrl = (repo: string, file: string, branch: string) =>
+  `${rawUrl}${repo}/${branch}/${file}`;
+let lsifReader = new LsifReader();
+
+const hoverProvider: languages.HoverProvider = {
+  provideHover: (
+    model: editor.ITextModel,
+    position: Position,
+    token: any
+  ): languages.ProviderResult<languages.Hover> => {
+    let result = lsifReader.hover(model.uri.toString(true), {
+      line: position.lineNumber - 1,
+      character: position.column - 1,
+    });
+    if (!result || !result.contents || !result.range) {
+      return;
+    }
+    let contents: IMarkdownString[];
+    if (typeof result.contents === "string") {
+      contents = [{ value: result.contents }];
+    } else if ("kind" in result.contents || "value" in result.contents) {
+      contents = [{ value: result.contents.value }];
+    } else {
+      contents = result.contents.map((c) =>
+        typeof c === "string" ? { value: c } : { value: c.value }
+      );
+    }
+
+    const range = {
+      startLineNumber: result.range.start.line,
+      startColumn: result.range.start.character,
+      endLineNumber: result.range.end.line,
+      endColumn: result.range.end.character,
+    };
+    return {
+      range,
+      contents: contents,
+    };
+  },
+};
+
+let mapLocation = (uri: Uri, l: any): languages.Location => {
+  let range = {
+    startLineNumber: l.range.start.line + 1,
+    startColumn: l.range.start.character + 1,
+    endLineNumber: l.range.end.line + 1,
+    endColumn: l.range.end.character + 1,
+  };
+  return { uri: uri, range: range };
+};
+
+let definitionProvider: languages.DefinitionProvider = {
+  provideDefinition: (
+    model: editor.ITextModel,
+    position: Position,
+    token: any
+  ): languages.ProviderResult<languages.Definition> => {
+    let result = lsifReader.definitions(model.uri.toString(true), {
+      line: position.lineNumber - 1,
+      character: position.column - 1,
+    });
+    if (!result) {
+      return;
+    }
+
+    let locations =
+      result instanceof Array
+        ? result.map((l) => mapLocation(model.uri, l))
+        : [mapLocation(model.uri, result)];
+    return locations;
+  },
+};
+
+let getDirName = (file: string) => {
+  let parts = file.split("/");
+  parts.pop();
+  return parts.join("/");
+};
+
+let pathJoin = (...parts: string[]) => {
+  return parts.join("/");
+};
+
+let transformerFactory = (
+  workspaceRoot: string | undefined,
+  context: FileContext
+): UriTransformer => {
+  return {
+    toDatabase: (_uri) => {
+      workspaceRoot = workspaceRoot?.endsWith(".toml")
+        ? getDirName(workspaceRoot)
+        : workspaceRoot;
+      if (!workspaceRoot) {
+        return _uri;
+      }
+      let result = pathJoin(workspaceRoot, context.path);
+      return result;
+    },
+    fromDatabase: (uri) => {
+      return uri;
+    },
+  };
+};
+
+let beforeMountHandler = async (monaco: Monaco, context: FileContext) => {
+  const indexUrl = getUrl(
+    "/" + context.owner + "/" + context.repo,
+    "index.lsif",
+    "lsif-index"
+  );
+  let res = await fetch(indexUrl);
+  let text = await res.text();
+  lsifReader.load(text, (wr) => transformerFactory(wr, context));
+};
 
 export default function (props: FileBlockProps) {
   const { context, content, metadata, onUpdateMetadata } = props;
@@ -28,12 +145,11 @@ export default function (props: FileBlockProps) {
     : "N/A";
 
   const monaco: Monaco | null = useMonaco();
-  console.log(language);
 
   useEffect(() => {
     if (monaco) {
-      // monaco.languages.registerHoverProvider("rust", hoverProvider);
-      // monaco.languages.registerDefinitionProvider("rust", definitionProvider);
+      monaco.languages.registerHoverProvider("*", hoverProvider);
+      monaco.languages.registerDefinitionProvider("*", definitionProvider);
     }
   }, [monaco]);
 
@@ -46,7 +162,7 @@ export default function (props: FileBlockProps) {
         readOnly: true,
       }}
       beforeMount={async (monaco: Monaco) => {
-        // return await beforeMountHandler(monaco, context);
+        return await beforeMountHandler(monaco, context);
       }}
     />
   );

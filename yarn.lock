@@ -507,6 +507,14 @@
     lodash.uniqueid "^4.0.1"
     zod "^3.11.6"
 
+"@ionide/lsif-reader@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@ionide/lsif-reader/-/lsif-reader-0.1.2.tgz#e9d698aff5efc6681d8548f7e6e373686970d570"
+  integrity sha512-YaK48+9S3NUpQB1E/MWoyLNzrbwCzas8WKVNlCJ/CoiU/dqvllOc+5TUQ9YxilymAKWY6Bj3OoWFfj7vg9OJYQ==
+  dependencies:
+    lsif-protocol "^0.5.3"
+    vscode-languageserver-types "^3.16.0"
+
 "@lezer/common@^0.15.0", "@lezer/common@^0.15.5":
   version "0.15.11"
   resolved "https://registry.yarnpkg.com/@lezer/common/-/common-0.15.11.tgz#965b5067036305f12e8a3efc344076850be1d3a8"
@@ -1850,6 +1858,13 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+lsif-protocol@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/lsif-protocol/-/lsif-protocol-0.5.3.tgz#233279e8c6fa7801eeb85549319e3933cb1bc7ad"
+  integrity sha512-zBSB9ixK44jmLiUv8Nwl9bsd/6KFozLML+rXmTU3zqfBmX7QBa6jmvkmzq+0RbUnSNJVOETw1SAOnLnEYePO4Q==
+  dependencies:
+    vscode-languageserver-protocol "^3.16.0"
+
 lz-string@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.4.4.tgz#c0d8eaf36059f705796e1e344811cf4c498d3a26"
@@ -2561,6 +2576,24 @@ vite@^2.6.4:
     rollup "^2.57.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+vscode-jsonrpc@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-6.0.0.tgz#108bdb09b4400705176b957ceca9e0880e9b6d4e"
+  integrity sha512-wnJA4BnEjOSyFMvjZdpiOwhSq9uDoK8e/kpRJDTaMYzwlkrhG1fwDIZI94CLsLzlCK5cIbMMtFlJlfR57Lavmg==
+
+vscode-languageserver-protocol@^3.16.0:
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.16.0.tgz#34135b61a9091db972188a07d337406a3cdbe821"
+  integrity sha512-sdeUoAawceQdgIfTI+sdcwkiK2KU+2cbEYA0agzM2uqaUy2UpnnGHtWTHVEtS0ES4zHU0eMFRGN+oQgDxlD66A==
+  dependencies:
+    vscode-jsonrpc "6.0.0"
+    vscode-languageserver-types "3.16.0"
+
+vscode-languageserver-types@3.16.0, vscode-languageserver-types@^3.16.0:
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.16.0.tgz#ecf393fc121ec6974b2da3efb3155644c514e247"
+  integrity sha512-k8luDIWJWyenLc5ToFQQMaSrqCHiLwyKPHKPQZ5zz21vM+vIVUSvsRpcbiECH4WR88K2XZqc4ScRcZ7nk/jbeA==
 
 w3c-keyname@^2.2.4:
   version "2.2.4"

@@ -33,6 +33,7 @@
   "dependencies": {
     "@codesandbox/sandpack-react": "^0.13.13",
     "@githubnext/utils": "^0.15.3",
+    "@ionide/lsif-reader": "^0.1.2",
     "@loadable/component": "^5.15.0",
     "@monaco-editor/react": "^4.3.1",
     "@octokit/rest": "^18.12.0",
