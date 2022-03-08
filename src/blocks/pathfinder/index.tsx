@@ -163,21 +163,26 @@ let beforeMountHandler = async (monaco: Monaco, context: FileContext) => {
   lsifReader.load(text, (wr) => transformerFactory(wr, context));
 };
 
+let inited = false;
+
 export default function (props: FileBlockProps) {
   const { context, content, metadata, onUpdateMetadata } = props;
   const language = Boolean(context.path)
     ? context.path.endsWith(".rs")
       ? "rust"
+      : context.path.endsWith(".cs")
+      ? "csharp"
       : getLanguageFromFilename(context.path).toLowerCase()
     : "N/A";
 
   const monaco: Monaco | null = useMonaco();
 
   useEffect(() => {
-    if (monaco) {
+    if (monaco && !inited) {
       monaco.languages.registerHoverProvider("*", hoverProvider);
       monaco.languages.registerDefinitionProvider("*", definitionProvider);
       monaco.languages.registerReferenceProvider("*", referencesProvider);
+      inited = true;
     }
   }, [monaco]);
 
